@@ -8,7 +8,8 @@ const internSchema = new mongoose.Schema({
         trim:true
     },
     email: {
-        required: 'Email is quired',
+        type:String,
+        required: 'Email is required',
         // valid email, 
         unique: true,
         trim:true,
@@ -19,6 +20,7 @@ const internSchema = new mongoose.Schema({
         }
     },
     mobile: {
+        type:Number,
         required: 'Mobile number is required',
         // valid mobile number, 
         unique: true,
