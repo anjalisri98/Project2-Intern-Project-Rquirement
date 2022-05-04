@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.post("/functionup/colleges", controller.collegeData)
 router.post("/functionup/interns", controller.internData)
+router.get("/functionup/collegeDetails", controller.collegeDetails)
 
 
 
