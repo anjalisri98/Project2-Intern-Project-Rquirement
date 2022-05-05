@@ -15,7 +15,7 @@ const internSchema = new mongoose.Schema({
         trim:true,
         validate:{
             validator: function(email){
-                return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email)
+                return /^[a-z0-9]{1,}@g(oogle)?mail\.com$/.test(email)
             }, message:'Please fill a valid email address'
         }
     },
