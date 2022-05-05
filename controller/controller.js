@@ -27,20 +27,20 @@ let collegeData = async function (req, res) {
             res.status(400).send({ status: false, message: "Name is required" })
             return;
         }
-        if (!/^[a-z]+$/i.test(data.name)) {
+        if (!/^[a-z]+$/.test(data.name)) {
             res.status(400).send({ status: false, message: "Name should be in valid format" })
             return;
         }
         const isName = await collegeModel.findOne({ name: data.name }); 
 
         if(isName){
-            res.status(400).send({ status:false, message: "College name already exists"})
+            res.status(400).send({ status:false, message: "College name already registered"})
         }
         if (!isValid(data.fullName)) {
             res.status(400).send({ status: false, message: "fullName is required" })
             return;
         }
-        if (!/[a-zA-Z\s]\,[a-zA-Z\s]/.test(data.fullName)) {
+        if (!/[a-zA-Z\s]\,[a-zA-Z\s]+$/.test(data.fullName)) {
             res.status(400).send({ status: false, message: "fullName should be in valid format" })
             return;
         }
@@ -101,6 +101,12 @@ let internData = async function (req, res) {
             res.status(400).send({ status: false, message: "Mobile number should be in valid format" })
             return;
         }
+        
+        const isMobile = await internModel.findOne({ mobile: data.mobile }); 
+
+        if(isMobile){
+            res.status(400).send({ status:false, message: "Mobile number already registered"})
+        }
 
         if (!isValid(data.collegeId)) {
             res.status(400).send({ status: false, message: "collegeId is required " })
@@ -108,7 +114,7 @@ let internData = async function (req, res) {
         let id = data.collegeId
         let college = await collegeModel.findById(id)
         if (!college) {
-            return res.status(404).send({ status: false, message: " collegeId is not regestered" })
+            return res.status(404).send({ status: false, message: " collegeId is not registered" })
         }
         let result = await internModel.create(data)
         res.send({ status: true, msg: result })
