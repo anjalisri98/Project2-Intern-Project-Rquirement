@@ -10,10 +10,9 @@ const internSchema = new mongoose.Schema({
     email: {
         type:String,
         required: 'Email is required',
-        // valid email, 
         unique: true,
         trim:true,
-        validate:{
+        validate:{                                       // valid email,
             validator: function(email){
                 return /^[a-z0-9]{1,}@g(oogle)?mail\.com$/.test(email)
             }, message:'Please fill a valid email address'
@@ -22,7 +21,6 @@ const internSchema = new mongoose.Schema({
     mobile: {
         type:Number,
         required: 'Mobile number is required',
-        // valid mobile number, 
         unique: true,
         trim:true
     },
