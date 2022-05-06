@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 
 
 const isValid = function (value) {
-    if (typeof value === 'undefined' || value === 'null') return false
+    if (typeof value === 'undefined' || value === 'null') return false     
     if (typeof value === 'string' && value.trim().length === 0) return false
     return true
 }
@@ -69,67 +69,64 @@ let collegeData = async function (req, res) {
 //================================================**Post Api : To create intern data**===========================================================//
 let internData = async function (req, res) {
     try {
-        let data = req.body
-        if (!isValidrequestBody(data)) {
+        const { name, email, mobile, collegeName } = req.body 
+        if (!isValidrequestBody(req.body)) {
             res.status(400).send({ status: false, message: "Invalid request parameters. Please provide intern details" })
             return;
         }
 
 
         //validations starts
-        if (!isValid(data.name)) {
+        if (!isValid(name)) {
             res.status(400).send({ status: false, message: "Name is required" })
             return;
         }
-        if (!/^[a-z,',-]+(\s)[a-z,',-]+$/i.test(data.name)) {
+        if (!/^[a-z,',-]+(\s)[a-z,',-]+$/i.test(name)) {
             res.status(400).send({ status: false, message: "Name should be in valid format" })
             return;
         }
 
-        if (!isValid(data.email)) {
+        if (!isValid(email)) {
             res.status(400).send({ status: false, message: "email is required" })
             return;
         }
-        const emailUsed = await internModel.findOne({ email: data.email })
+        const emailUsed = await internModel.findOne({ email: email })
         if (emailUsed) {
             res.status(400).send({ status: false, message: "Email is already registered" })
             return;
         }
 
-        if (!isValid(data.mobile)) {
+        if (!isValid(mobile)) {
             res.status(400).send({ status: false, message: "Number is required" })
             return;
         }
-        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(data.mobile)) {
+        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(mobile)) {
             res.status(400).send({ status: false, message: "Mobile number should be in valid format" })
             return;
         }
 
-        const isMobile = await internModel.findOne({ mobile: data.mobile });
+        const isMobile = await internModel.findOne({ mobile: mobile });
 
         if (isMobile) {
             res.status(400).send({ status: false, message: "Mobile number already registered" })
             return;
         }
 
-        if (!isValid(data.collegeId)) {
-            res.status(400).send({ status: false, message: "collegeId is required " })
+        if(!collegeName){
+            res.status(400).send({ status: false, message: "collegeName is required" })
             return;
-        }
 
-        if (!/^[0-9a-fA-F]{24}$/.test(data.collegeId)){
-            res.status(400).send({status:false, message:"Please enter valid 24 characters in collegeId "})
-            return;
         }
-        let id = data.collegeId
-        let college = await collegeModel.findById(id)
-        if (!college) {
-            return res.status(404).send({ status: false, message: " collegeId is not registered" })
+        
+        const doc = await collegeModel.findOne({name:collegeName})
+        if(!doc){
+            res.status(400).send({ status: false, message: "collegeName is not registered" })
+            return;
         }
 
         //validation ends
-
-        let result = await internModel.create(data)
+        let collegeId=doc._id 
+        const result = await internModel.create({name,email, mobile,collegeId})
         res.status(201).send({ status: true, data: result })
 
 
