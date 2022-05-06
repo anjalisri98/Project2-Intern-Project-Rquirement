@@ -55,12 +55,12 @@ let collegeData = async function (req, res) {
         //validations ends
 
         let result = await collegeModel.create(data)
-        res.status(201).send({ status: true, msg: result })
+        res.status(201).send({ status: true, data: result })
 
 
     }
     catch (err) {
-        res.status(500).send({ status: false, data: err.message })
+        res.status(500).send({ status: false, message: err.message })
     }
 
 }
@@ -116,6 +116,11 @@ let internData = async function (req, res) {
             res.status(400).send({ status: false, message: "collegeId is required " })
             return;
         }
+
+        if (!/^[0-9a-fA-F]{24}$/.test(data.collegeId)){
+            res.status(400).send({status:false, message:"Please enter valid 24 characters in collegeId "})
+            return;
+        }
         let id = data.collegeId
         let college = await collegeModel.findById(id)
         if (!college) {
@@ -125,12 +130,12 @@ let internData = async function (req, res) {
         //validation ends
 
         let result = await internModel.create(data)
-        res.status(201).send({ status: true, msg: result })
+        res.status(201).send({ status: true, data: result })
 
 
     }
     catch (err) {
-        res.status(500).send({ status: false, data: err.message })
+        res.status(500).send({ status: false, message: err.message })
     }
 
 }
@@ -167,9 +172,9 @@ let collegeDetails = async function (req, res) {
             logoLink: specificCollege.logoLink,
             interests: intern                                   //array in intern
         }
-        return res.status(200).send({ status: true, msg: data })
+        return res.status(200).send({ status: true, data: data })
     } catch (err) {
-        res.status(500).send({ status: false, data: err.message })
+        res.status(500).send({ status: false, message: err.message })
     }
 }
 module.exports = { collegeData, internData, collegeDetails }
