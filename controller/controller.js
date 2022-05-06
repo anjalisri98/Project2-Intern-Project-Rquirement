@@ -145,7 +145,7 @@ let internData = async function (req, res) {
 
 let collegeDetails = async function (req, res) {
     try {
-        let query = req.query.name
+        let query = req.query.collegeName
 
         //validation starts
         if (!isValid(query)) {
