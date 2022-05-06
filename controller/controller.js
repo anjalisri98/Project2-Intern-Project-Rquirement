@@ -161,11 +161,17 @@ let collegeDetails = async function (req, res) {
             res.status(400).send({ status: true, message: "No college exists with that name" })
         }
 
-         //validations ends 
+        
 
         let id = specificCollege._id.toString()
         let intern = await internModel.find({ collegeId: id, isDeleted: false })
 
+        if(!isValidrequestBody(intern)){
+            res.status(400).send({status:false, message: "no intern regestered"})
+            return;
+        }
+        
+        //validations ends 
         let data = {                                             //new object 
             name: specificCollege.name,
             fullName: specificCollege.fullName,
