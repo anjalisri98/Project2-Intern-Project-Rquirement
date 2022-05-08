@@ -69,14 +69,14 @@ let collegeData = async function (req, res) {
 //================================================**Post Api : To create intern data**===========================================================//
 let internData = async function (req, res) {
     try {
-        const { name, email, mobile, collegeName } = req.body 
+        const { name, email, mobile, collegeName } = req.body
+
+         //validations starts
         if (!isValidrequestBody(req.body)) {
             res.status(400).send({ status: false, message: "Invalid request parameters. Please provide intern details" })
             return;
         }
 
-
-        //validations starts
         if (!isValid(name)) {
             res.status(400).send({ status: false, message: "Name is required" })
             return;
@@ -90,6 +90,11 @@ let internData = async function (req, res) {
             res.status(400).send({ status: false, message: "email is required" })
             return;
         }
+        if (!/^[a-z0-9]{1,}@g(oogle)?mail\.com$/.test(email)) {
+            res.status(400).send({ status: false, message: "Email should be in valid format" })
+            return;
+        }
+
         const emailUsed = await internModel.findOne({ email: email })
         if (emailUsed) {
             res.status(400).send({ status: false, message: "Email is already registered" })
@@ -128,6 +133,7 @@ let internData = async function (req, res) {
         let collegeId=doc._id 
         const result = await internModel.create({name,email, mobile,collegeId})
         res.status(201).send({ status: true, data: result })
+        
 
 
     }
@@ -156,15 +162,14 @@ let collegeDetails = async function (req, res) {
         let specificCollege = await collegeModel.findOne({ name: query })
         if (!specificCollege) {
             res.status(400).send({ status: true, message: "No college exists with that name" })
+            return;
         }
-
-        
 
         let id = specificCollege._id.toString()
         let intern = await internModel.find({ collegeId: id, isDeleted: false })
 
         if(!isValidrequestBody(intern)){
-            res.status(400).send({status:false, message: "no intern regestered"})
+            res.status(400).send({status:false, message: "no intern is regestered"})
             return;
         }
         

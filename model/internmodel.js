@@ -11,12 +11,7 @@ const internSchema = new mongoose.Schema({
         type:String,
         required: 'Email is required',
         unique: true,
-        trim:true,
-        validate:{                                       // valid email,
-            validator: function(email){
-                return /^[a-z0-9]{1,}@g(oogle)?mail\.com$/.test(email)
-            }, message:'Please fill a valid email address'
-        }
+        trim:true
     },
     mobile: {
         type:Number,
